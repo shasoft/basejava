@@ -1,3 +1,5 @@
+package com.basejava;
+
 /**
  * Test for your ArrayStorage implementation
  */
@@ -18,6 +20,10 @@ public class MainTestArrayStorage {
 
         System.out.println("Get r1: " + ARRAY_STORAGE.get(r1.uuid));
         System.out.println("Size: " + ARRAY_STORAGE.size());
+
+        Resume r2Update = ARRAY_STORAGE.get(r2.uuid);
+        System.out.println("Update: " + ARRAY_STORAGE.get(r2Update.uuid));
+        ARRAY_STORAGE.update(r2Update);
 
         System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
 
