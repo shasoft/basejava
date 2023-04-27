@@ -6,18 +6,15 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    static public final int STORAGE_LIMIT = 10000;
+    public static final int STORAGE_LIMIT = 10000;
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
     private int size;
 
-    private int findIndex(String uuid, boolean printError) {
+    private int findIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (uuid.equals(storage[i].uuid)) {
                 return i;
             }
-        }
-        if (printError) {
-            System.out.println("Резюме " + uuid + " отсутствует");
         }
         return -1;
     }
@@ -28,42 +25,48 @@ public class ArrayStorage {
     }
 
     public void save(Resume r) {
-        if (size < storage.length) {
-            int index = findIndex(r.uuid, false);
-            if (index < 0) {
+        if (size == storage.length) {
+            System.out.println("Переполнение хранилища");
+        } else {
+            int index = findIndex(r.uuid);
+            if (index >= 0) {
+                System.out.println("Резюме " + r.uuid + " уже имеется в хранилище");
+            } else {
                 storage[size] = r;
                 size++;
-            } else {
-                System.out.println("Резюме " + r.uuid + " уже имеется в хранилище");
             }
-        } else {
-            System.out.println("Переполнение хранилища");
         }
     }
 
     public void update(Resume r) {
-        int index = findIndex(r.uuid, true);
+        int index = findIndex(r.uuid);
         if (index >= 0) {
             storage[index] = r;
+        } else {
+            System.out.println("Резюме " + r.uuid + " отсутствует");
         }
     }
 
     public Resume get(String uuid) {
-        int index = findIndex(uuid, true);
+        int index = findIndex(uuid);
         if (index >= 0) {
             return storage[index];
+        } else {
+            System.out.println("Резюме " + uuid + " отсутствует");
         }
         return null;
     }
 
     public void delete(String uuid) {
-        int index = findIndex(uuid, true);
+        int index = findIndex(uuid);
         if (index >= 0) {
             size--;
-            if (size > 0) {
+            if (index != size) {
                 storage[index] = storage[size];
             }
             storage[size] = null;
+        } else {
+            System.out.println("Резюме " + uuid + " отсутствует");
         }
     }
 
