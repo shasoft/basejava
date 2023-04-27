@@ -33,6 +33,8 @@ public class ArrayStorage {
             if (index < 0) {
                 storage[size] = r;
                 size++;
+            } else {
+                System.out.println("Резюме " + r.uuid + " уже имеется в хранилище");
             }
         } else {
             System.out.println("Переполнение хранилища");
