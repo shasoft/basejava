@@ -28,24 +28,26 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     public Resume[] getAll() {
         return Arrays.copyOfRange(storage, 0, size);
     }
-
-    protected void onSave(Resume r, int index) {
+    protected boolean isExist(Object searchKey) {
+        return (Integer) searchKey >= 0;
+    }
+    protected void doSave(Resume r, Object searchKey) {
       if (size == STORAGE_LIMIT) {
           throw new StorageException("Storage overflow", r.getUuid());
       }
-      insertElement(r, index);
+      insertElement(r, (Integer)searchKey);
       size++;
     }
-    protected void onUpdate(Resume r, int index) {
-        storage[index] = r;
+    protected void doUpdate(Resume r, Object searchKey) {
+        storage[(Integer)searchKey] = r;
     }
-    protected void onDelete(int index) {
-        fillDeletedElement(index);
+    protected void doDelete(Object searchKey) {
+        fillDeletedElement((Integer)searchKey);
         storage[size - 1] = null;
         size--;
     }
-    protected Resume onGet(int index) {
-        return storage[index];
+    protected Resume doGet(Object searchKey) {
+        return storage[(Integer)searchKey];
     }
 
     protected abstract void fillDeletedElement(int index);
