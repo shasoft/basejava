@@ -19,8 +19,8 @@ public class ListStorage extends AbstractStorage {
         items.clear();
     }
 
-    public Resume[] getAll() {
-        return items.toArray(new Resume[0]);
+    protected List<Resume> doAll() {
+        return new ArrayList<>(items);
     }
 
     protected Integer getSearchKey(String uuid) {
@@ -31,19 +31,24 @@ public class ListStorage extends AbstractStorage {
         }
         return -1;
     }
+
     protected boolean isExist(Object searchKey) {
-        return (Integer)searchKey != -1;
+        return (Integer) searchKey != -1;
     }
+
     protected void doSave(Resume r, Object searchKey) {
         items.add(r);
     }
+
     protected void doUpdate(Resume r, Object searchKey) {
-        items.set((Integer)searchKey, r);
+        items.set((Integer) searchKey, r);
     }
+
     protected void doDelete(Object searchKey) {
-        items.remove((int)(Integer)searchKey);
+        items.remove((int) (Integer) searchKey);
     }
+
     protected Resume doGet(Object searchKey) {
-        return items.get((Integer)searchKey);
+        return items.get((Integer) searchKey);
     }
 }

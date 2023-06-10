@@ -2,43 +2,50 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.Resume;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Array based storage for Resumes
  */
 public class MapStorage extends AbstractStorage {
-    protected Map<String, Resume> items = new HashMap<>();
+    protected Map<String, Resume> storage = new HashMap<>();
 
     public int size() {
-        return items.size();
+        return storage.size();
     }
 
     public void clear() {
-        items.clear();
+        storage.clear();
     }
 
-    public Resume[] getAll() {
-        return items.values().toArray(new Resume[0]);
+    protected List<Resume> doAll() {
+        return new ArrayList<>(storage.values());
     }
 
     protected String getSearchKey(String uuid) {
-       return uuid;
+        return uuid;
     }
+
     protected boolean isExist(Object searchKey) {
-        return items.containsKey((String)searchKey);
+        return storage.containsKey((String) searchKey);
     }
+
     protected void doSave(Resume r, Object searchKey) {
-        items.put((String)searchKey,r);
+        storage.put((String) searchKey, r);
     }
+
     protected void doUpdate(Resume r, Object searchKey) {
-        items.put((String)searchKey,r);
+        storage.put((String) searchKey, r);
     }
+
     protected void doDelete(Object searchKey) {
-        items.remove((String)searchKey);
+        storage.remove((String) searchKey);
     }
+
     protected Resume doGet(Object searchKey) {
-        return items.get((String)searchKey);
+        return storage.get((String) searchKey);
     }
 }
