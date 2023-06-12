@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Array based storage for Resumes
  */
-public class MapStorageByResume extends AbstractStorage {
+public class MapResumeStorage extends AbstractStorage {
     protected Map<String, Resume> storage = new HashMap<>();
 
     public int size() {
@@ -30,7 +30,7 @@ public class MapStorageByResume extends AbstractStorage {
     }
 
     protected boolean isExist(Object resume) {
-        return resume!=null;
+        return resume != null;
     }
 
     protected void doSave(Resume r, Object resume) {
@@ -42,10 +42,10 @@ public class MapStorageByResume extends AbstractStorage {
     }
 
     protected void doDelete(Object resume) {
-        storage.remove(((Resume)resume).getUuid());
+        storage.remove(((Resume) resume).getUuid());
     }
 
     protected Resume doGet(Object resume) {
-        return (Resume)resume;
+        return (Resume) resume;
     }
 }

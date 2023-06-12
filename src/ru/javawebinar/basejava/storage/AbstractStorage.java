@@ -12,6 +12,9 @@ import java.util.List;
  * Based storage for Resumes
  */
 public abstract class AbstractStorage implements Storage {
+
+    protected static final Comparator<Resume> RESUME_COMPARATOR =
+            Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
     protected abstract Object getSearchKey(String uuid);
 
     protected abstract boolean isExist(Object searchKey);
@@ -49,15 +52,7 @@ public abstract class AbstractStorage implements Storage {
     public List<Resume> getAllSorted() {
         List<Resume> items = doAll();
         //Collections.sort(list);
-        Collections.sort(items, new Comparator<Resume>() {
-            public int compare(Resume r1, Resume r2) {
-                int ret = r1.getFullName().compareToIgnoreCase(r2.getFullName());
-                if(ret==0) {
-                    ret = r1.getUuid().compareToIgnoreCase(r2.getUuid());
-                }
-                return ret;
-            }
-        });
+        Collections.sort(items, RESUME_COMPARATOR);
         return items;
     }
 
