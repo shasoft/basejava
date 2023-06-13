@@ -1,0 +1,31 @@
+<mxfile host="Electron" modified="2023-06-11T10:54:03.435Z" agent="Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.1.2 Chrome/106.0.5249.199 Electron/21.4.3 Safari/537.36" etag="vBtxBHvPfqDQot97KyOK" version="21.1.2" type="device">
+  <diagram id="R2lEEEUBdFMjLlhIrx00" name="Page-1">
+    <mxGraphModel dx="618" dy="360" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" extFonts="Permanent Marker^https://fonts.googleapis.com/css?family=Permanent+Marker">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="8wYMat_YEfy3_NqPt5DG-1" value="Resume" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="280" width="230" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="8wYMat_YEfy3_NqPt5DG-2" value="+uuid: String&lt;br&gt;+fullname: String&lt;br&gt;&lt;br&gt;+contacts: Map&amp;lt;TypeContact,String&amp;gt;&lt;br&gt;+sections: Map&amp;lt;TypeSection, Section&amp;gt;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;" vertex="1" parent="8wYMat_YEfy3_NqPt5DG-1">
+          <mxGeometry y="50" width="230" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="8wYMat_YEfy3_NqPt5DG-3" value="Resume" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="490" width="230" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="8wYMat_YEfy3_NqPt5DG-4" value="+uuid: String&lt;br&gt;+fullname: String&lt;br&gt;&lt;br&gt;+contacts: Map&amp;lt;TypeContact,String&amp;gt;&lt;br&gt;+sections: Map&amp;lt;TypeSection, Section&amp;gt;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;" vertex="1" parent="8wYMat_YEfy3_NqPt5DG-3">
+          <mxGeometry y="50" width="230" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="8wYMat_YEfy3_NqPt5DG-6" value="String" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="440" y="310" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="8wYMat_YEfy3_NqPt5DG-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.631;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitPerimeter=0;startArrow=diamondThin;startFill=1;" edge="1" parent="1" source="8wYMat_YEfy3_NqPt5DG-2" target="8wYMat_YEfy3_NqPt5DG-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="8wYMat_YEfy3_NqPt5DG-9" value="0..*" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="397.5" y="310" width="35" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

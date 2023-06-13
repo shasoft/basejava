@@ -51,7 +51,6 @@ public abstract class AbstractStorage implements Storage {
 
     public List<Resume> getAllSorted() {
         List<Resume> items = doAll();
-        //Collections.sort(list);
         Collections.sort(items, RESUME_COMPARATOR);
         return items;
     }
