@@ -9,21 +9,18 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static ru.javawebinar.basejava.ResumeTestData.createResume;
 
 class AbstractStorageTest {
-    final protected Storage storage;
-
     protected static final String UUID_1 = "uuid 1";
-    protected static final Resume RESUME_1 = new Resume(UUID_1);
-
+    protected static final Resume RESUME_1 = createResume(UUID_1, "Иванов 1");
     protected static final String UUID_2 = "uuid 2";
-    protected static final Resume RESUME_2 = new Resume(UUID_2);
-
+    protected static final Resume RESUME_2 = createResume(UUID_2, "Иванов 2");
     protected static final String UUID_3 = "uuid 3";
-    protected static final Resume RESUME_3 = new Resume(UUID_3);
-
+    protected static final Resume RESUME_3 = createResume(UUID_3, "Иванов 3");
     protected static final String UUID_4 = "uuid 4";
-    protected static final Resume RESUME_4 = new Resume(UUID_4);
+    protected static final Resume RESUME_4 = createResume(UUID_4, "Иванов 4");
+    final protected Storage storage;
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -50,7 +47,7 @@ class AbstractStorageTest {
 
     @Test
     void update() {
-        Resume newResume = new Resume(UUID_1);
+        Resume newResume = createResume(UUID_1, "Иванов 1");
         storage.update(newResume);
         assertSame(newResume, storage.get(UUID_1));
     }
@@ -103,7 +100,7 @@ class AbstractStorageTest {
     @Test
     public void updateNotExist() {
         assertThrows(NotExistStorageException.class, () ->
-                storage.update(new Resume("null"))
+                storage.update(createResume("null","Пустозвонов Василий"))
         );
     }
 

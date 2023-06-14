@@ -1,14 +1,15 @@
 package ru.javawebinar.basejava.model;
 
-public class OrganizationMain {
+public class OrganizationHead {
     private String title;
     private String website;
 
-    public OrganizationMain(String title) {
+    public OrganizationHead(String title) {
         this(title, "");
+
     }
 
-    public OrganizationMain(String title, String website) {
+    public OrganizationHead(String title, String website) {
         this.title = title;
         this.website = website;
     }
@@ -25,7 +26,7 @@ public class OrganizationMain {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        OrganizationMain that = (OrganizationMain) o;
+        OrganizationHead that = (OrganizationHead) o;
 
         if (!title.equals(that.title)) return false;
         if (!website.equals(that.website)) return false;
@@ -37,7 +38,7 @@ public class OrganizationMain {
     }
 
     public String toString() {
-        return "OrganizationMain{" +
+        return "OrganizationHead{" +
                 "title=" + title +
                 ", website=" + website +
                 "}";

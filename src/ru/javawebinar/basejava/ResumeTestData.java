@@ -62,7 +62,7 @@ public class ResumeTestData {
 
         OrganizationSection experience = (OrganizationSection) resume.addSection(SectionType.EXPERIENCE, new OrganizationSection());
 
-        organization = new Organization("Java Online Projects", "http://javaops.ru/");
+        organization = new Organization(new OrganizationHead("Java Online Projects", "http://javaops.ru/"));
         organization.getPeriods().add(new Period(
                 "Автор проекта.",
                 LocalDate.of(2013, 10, 1),
@@ -71,7 +71,7 @@ public class ResumeTestData {
         ));
         experience.getOrganizations().add(organization);
 
-        organization = new Organization("Wrike", "https://www.wrike.com/");
+        organization = new Organization(new OrganizationHead("Wrike", "https://www.wrike.com/"));
         organization.getPeriods().add(new Period(
                 "Старший разработчик (backend)",
                 LocalDate.of(2014, 10, 1),
@@ -80,7 +80,7 @@ public class ResumeTestData {
         ));
         experience.getOrganizations().add(organization);
 
-        organization = new Organization("RIT Center");
+        organization = new Organization(new OrganizationHead("RIT Center"));
         organization.getPeriods().add(new Period(
                 "Java архитектор",
                 LocalDate.of(2012, 4, 1),
@@ -89,7 +89,7 @@ public class ResumeTestData {
         ));
         experience.getOrganizations().add(organization);
 
-        organization = new Organization("Luxoft (Deutsche Bank)", "http://www.luxoft.ru/");
+        organization = new Organization(new OrganizationHead("Luxoft (Deutsche Bank)", "http://www.luxoft.ru/"));
         organization.getPeriods().add(new Period(
                 "Ведущий программист",
                 LocalDate.of(2010, 12, 1),
@@ -98,7 +98,7 @@ public class ResumeTestData {
         ));
         experience.getOrganizations().add(organization);
 
-        organization = new Organization("Yota", "https://www.yota.ru/");
+        organization = new Organization(new OrganizationHead("Yota", "https://www.yota.ru/"));
         organization.getPeriods().add(new Period(
                 "Ведущий специалист",
                 LocalDate.of(2008, 6, 1),
@@ -107,7 +107,7 @@ public class ResumeTestData {
         ));
         experience.getOrganizations().add(organization);
 
-        organization = new Organization("Enkata", "http://enkata.com/");
+        organization = new Organization(new OrganizationHead("Enkata", "http://enkata.com/"));
         organization.getPeriods().add(new Period(
                 "Разработчик ПО",
                 LocalDate.of(2007, 3, 1),
@@ -116,7 +116,7 @@ public class ResumeTestData {
         ));
         experience.getOrganizations().add(organization);
 
-        organization = new Organization("Siemens AG", "https://www.siemens.com/ru/ru/home.html");
+        organization = new Organization(new OrganizationHead("Siemens AG", "https://www.siemens.com/ru/ru/home.html"));
         organization.getPeriods().add(new Period(
                 "Разработчик ПО",
                 LocalDate.of(2005, 1, 1),
@@ -125,7 +125,7 @@ public class ResumeTestData {
         ));
         experience.getOrganizations().add(organization);
 
-        organization = new Organization("Alcatel", "http://www.alcatel.ru/");
+        organization = new Organization(new OrganizationHead("Alcatel", "http://www.alcatel.ru/"));
         organization.getPeriods().add(new Period(
                 "Инженер по аппаратному и программному тестированию",
                 LocalDate.of(1997, 9, 1),
@@ -136,7 +136,7 @@ public class ResumeTestData {
 
         OrganizationSection education = (OrganizationSection) resume.addSection(SectionType.EDUCATION, new OrganizationSection());
 
-        organization = new Organization("Coursera", "https://www.coursera.org/course/progfun");
+        organization = new Organization(new OrganizationHead("Coursera", "https://www.coursera.org/course/progfun"));
         organization.getPeriods().add(new Period(
                 "'Functional Programming Principles in Scala' by Martin Odersky",
                 LocalDate.of(2013, 3, 1),
@@ -144,7 +144,7 @@ public class ResumeTestData {
         ));
         education.getOrganizations().add(organization);
 
-        organization = new Organization("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366");
+        organization = new Organization(new OrganizationHead("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366"));
         organization.getPeriods().add(new Period(
                 "Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.'",
                 LocalDate.of(2011, 3, 1),
@@ -152,7 +152,7 @@ public class ResumeTestData {
         ));
         education.getOrganizations().add(organization);
 
-        organization = new Organization("Siemens AG", "http://www.siemens.ru/");
+        organization = new Organization(new OrganizationHead("Siemens AG", "http://www.siemens.ru/"));
         organization.getPeriods().add(new Period(
                 "3 месяца обучения мобильным IN сетям (Берлин)",
                 LocalDate.of(2005, 1, 1),
@@ -160,7 +160,7 @@ public class ResumeTestData {
         ));
         education.getOrganizations().add(organization);
 
-        organization = new Organization("Alcatel", "http://www.alcatel.ru/");
+        organization = new Organization(new OrganizationHead("Alcatel", "http://www.alcatel.ru/"));
         organization.getPeriods().add(new Period(
                 "6 месяцев обучения цифровым телефонным сетям (Москва)",
                 LocalDate.of(1997, 9, 1),
@@ -168,7 +168,7 @@ public class ResumeTestData {
         ));
         education.getOrganizations().add(organization);
 
-        organization = new Organization("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "http://www.ifmo.ru/");
+        organization = new Organization(new OrganizationHead("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "http://www.ifmo.ru/"));
         organization.getPeriods().add(new Period(
                 "Аспирантура (программист С, С++)",
                 LocalDate.of(1993, 9, 1),
@@ -181,7 +181,7 @@ public class ResumeTestData {
         ));
         education.getOrganizations().add(organization);
 
-        organization = new Organization("Заочная физико-техническая школа при МФТИ", "https://mipt.ru/");
+        organization = new Organization(new OrganizationHead("Заочная физико-техническая школа при МФТИ", "https://mipt.ru/"));
         organization.getPeriods().add(new Period(
                 "Закончил с отличием",
                 LocalDate.of(1984, 9, 1),
