@@ -19,7 +19,7 @@ public class ListStorage extends AbstractStorage {
         items.clear();
     }
 
-    protected List<Resume> doAll() {
+    protected List<Resume> doCopyAll() {
         return new ArrayList<>(items);
     }
 

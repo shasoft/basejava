@@ -21,7 +21,7 @@ public class MapResumeStorage extends AbstractStorage {
         storage.clear();
     }
 
-    protected List<Resume> doAll() {
+    protected List<Resume> doCopyAll() {
         return new ArrayList<>(storage.values());
     }
 
