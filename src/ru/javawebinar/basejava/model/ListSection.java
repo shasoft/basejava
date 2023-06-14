@@ -4,23 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListSection extends AbstractSection {
-    private List<String> texts = new ArrayList<>();
+    private final List<String> strings = new ArrayList<>();
 
-    public List<String> all() {
-        return texts;
+    public List<String> getStrings() {
+        return strings;
     }
 
-    public void add(String text) {
-        texts.add(text);
+    public int hashCode() {
+        return strings.hashCode();
     }
 
-    public void remove(int index) {
-        texts.remove(index);
-    }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    public void println() {
-        for(String text : texts) {
-            System.out.println("\t\t"+text);
-        }
+        ListSection that = (ListSection) o;
+
+        return strings.equals(that.strings);
+    }
+    public String toString() {
+        return "ListSection{" +
+                strings.toString() +
+                "}";
     }
 }

@@ -1,7 +1,5 @@
 package ru.javawebinar.basejava.model;
 
-import java.time.LocalDate;
-
 public class TextSection extends AbstractSection {
     private String text;
 
@@ -13,7 +11,22 @@ public class TextSection extends AbstractSection {
         return text;
     }
 
-    public void println() {
-        System.out.println("\t\t"+text);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TextSection that = (TextSection) o;
+
+        return text.equals(that.text);
+    }
+
+    public int hashCode() {
+        return text.hashCode();
+    }
+
+    public String toString() {
+        return "TextSection{" +
+                text +
+                "}";
     }
 }

@@ -37,4 +37,29 @@ public class Period {
     public String getDescription() {
         return description;
     }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Period that = (Period) o;
+
+        if (!title.equals(that.title)) return false;
+        if (!startDate.equals(that.startDate)) return false;
+        if (!endDate.equals(that.endDate)) return false;
+        if (!description.equals(that.description)) return false;
+        return true;
+    }
+
+    public int hashCode() {
+        return title.hashCode() ^ startDate.hashCode() ^ endDate.hashCode() ^ description.hashCode();
+    }
+    public String toString() {
+        return "Period{" +
+                "title=" + title +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", description='" + description + "'" +
+                "}";
+    }
 }

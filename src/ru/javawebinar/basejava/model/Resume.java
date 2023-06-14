@@ -10,20 +10,18 @@ public class Resume implements Comparable<Resume> {
     // Unique identifier
     private final String uuid;
 
-    private String fullName;
+    private final String fullName;
 
-    private EnumMap <ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private final EnumMap <ContactType, String> contacts = new EnumMap<>(ContactType.class);
 
-    private EnumMap<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+    private final EnumMap<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     public Resume() {
-        this(UUID.randomUUID().toString());
-        this.fullName = "Unknown";
+        this(UUID.randomUUID().toString(), "Unknown");
     }
 
     public Resume(String uuid) {
-        this.uuid = uuid;
-        this.fullName = "Unknown";
+        this(uuid, "Unknown");
     }
 
     public Resume(String uuid, String fullName) {
@@ -46,17 +44,18 @@ public class Resume implements Comparable<Resume> {
 
         Resume resume = (Resume) o;
 
-        return uuid.equals(resume.uuid);
+        if (!uuid.equals(resume.uuid)) return false;
+        return fullName.equals(resume.fullName);
     }
 
     @Override
     public int hashCode() {
-        return uuid.hashCode();
+        return uuid.hashCode() ^ fullName.hashCode();
     }
 
     @Override
     public String toString() {
-        return uuid;
+        return "Resume{uuid="+uuid + ", fullName=" + fullName + "}";
     }
 
     @Override
@@ -68,7 +67,7 @@ public class Resume implements Comparable<Resume> {
         contacts.put(type, contact);
     }
 
-    public Map<ContactType, String> allContacts() {
+    public Map<ContactType, String> getContacts() {
         return contacts;
     }
 
@@ -81,22 +80,11 @@ public class Resume implements Comparable<Resume> {
         return section;
     }
 
-    public Map<SectionType, AbstractSection> allSections() {
+    public Map<SectionType, AbstractSection> getSections() {
         return sections;
     }
 
     public AbstractSection getSection(SectionType type) {
         return sections.get(type);
-    }
-
-    public void println() {
-        System.out.println(getUuid()+" "+getFullName());
-        for (Map.Entry<ContactType, String> entry : allContacts().entrySet()) {
-            System.out.println("\t"+entry.getKey().getTitle() + ": " + entry.getValue());
-        }
-        for (Map.Entry<SectionType, AbstractSection> entry : allSections().entrySet()) {
-            System.out.println("\t*** "+entry.getKey().getTitle()+" ***");
-            entry.getValue().println();
-        }
     }
 }

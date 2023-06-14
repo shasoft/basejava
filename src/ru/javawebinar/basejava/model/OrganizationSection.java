@@ -4,29 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrganizationSection extends AbstractSection {
-    private List<Organization> organizations = new ArrayList<>();
+    private final List<Organization> organizations = new ArrayList<>();
 
-    public List<Organization> organizations() {
+    public List<Organization> getOrganizations() {
         return organizations;
     }
 
-    public Organization add(Organization organization) {
-        organizations.add(organization);
-        return organization;
+    public int hashCode() {
+        return organizations.hashCode();
     }
 
-    public void remove(int index) {
-        organizations.remove(index);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OrganizationSection that = (OrganizationSection) o;
+
+        return organizations.equals(that.organizations);
     }
 
-    public void println() {
-        for (Organization organization : organizations) {
-            System.out.println("\t\t" + organization.getTitle() + " " + organization.getWebsite());
-            for (Period period : organization.periods()) {
-                System.out.println("\t\t\t" + period.getStartDate() + " - " + period.getEndDate());
-                System.out.println("\t\t\t\t" + period.getTitle());
-                System.out.println("\t\t\t\t" + period.getDescription());
-            }
-        }
+    public String toString() {
+        return "OrganizationSection{" +
+                organizations.toString() +
+                "}";
     }
 }
