@@ -7,25 +7,18 @@ import java.util.List;
 public class MainScanFiles {
     public static void main(String[] args) {
         try {
-            List<File> dirs = new ArrayList<>();
-            dirs.add(new File("."));
-            while (!dirs.isEmpty()) {
-                File dir = dirs.get(dirs.size() - 1);
-                dirs.remove(dirs.size() - 1);
-
-                System.out.println("Д: "+dir.getCanonicalPath());
-
-                File[] items = dir.listFiles();
-                for(File item : items ) {
-                    if( item.isDirectory() ) {
-                        dirs.add(item);
-                    } else {
-                        System.out.println("Ф: "+item.getCanonicalPath());
-                    }
-                }
-            }
+            printFile(0, new File("."));
         } catch (Exception e) {
             e.printStackTrace();
         }
      }
+    public static void printFile(int indent, File file) throws Exception {
+        System.out.println((file.isFile() ? "Ф":"Д")+"> "+".".repeat(indent)+" "+file.toPath().getFileName());
+        if( file.isDirectory() ) {
+            File[] items = file.listFiles();
+            for (File item : items) {
+                printFile(indent+2, item);
+            }
+        }
+    }
 }

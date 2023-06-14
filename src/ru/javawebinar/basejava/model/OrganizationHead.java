@@ -1,6 +1,8 @@
 package ru.javawebinar.basejava.model;
 
-public class OrganizationHead {
+import java.io.Serializable;
+
+public class OrganizationHead implements Serializable {
     private String title;
     private String website;
 

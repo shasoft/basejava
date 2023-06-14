@@ -1,9 +1,10 @@
 package ru.javawebinar.basejava.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Organization {
+public class Organization implements Serializable {
     private OrganizationHead head;
 
     private final List<Period> periods = new ArrayList<>();

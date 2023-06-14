@@ -2,24 +2,29 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.stream.Serializer;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.System.exit;
 
 /**
  * Array based storage for Resumes
  */
-abstract public class AbstractFileStorage extends AbstractStorage {
+public class FileStorage extends AbstractStorage<File> {
 
     protected final File directory;
 
-    public AbstractFileStorage(File directory) {
+    private Serializer serializer;
+
+    public FileStorage(File directory, Serializer serializer) {
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " не является директорией");
         }
         this.directory = directory;
+        this.serializer = serializer;
     }
 
     public int size() {
@@ -77,7 +82,7 @@ abstract public class AbstractFileStorage extends AbstractStorage {
 
     protected void doUpdate(Resume r, File searchKey) {
         try {
-            doWrite(r, searchKey);
+            serializer.doWrite(r, new BufferedOutputStream(new FileOutputStream(searchKey)));
         } catch (IOException e) {
             throw new StorageException("Ошибка сохранения резюме в файл", searchKey.getName());
         }
@@ -85,13 +90,9 @@ abstract public class AbstractFileStorage extends AbstractStorage {
 
     protected Resume doGet(File searchKey) {
         try {
-            return doRead(searchKey);
+            return serializer.doRead(new BufferedInputStream(new FileInputStream(searchKey)));
         } catch (IOException e) {
             throw new StorageException("Ошибка чтения резюме из файла", searchKey.getName());
         }
     }
-
-    protected abstract void doWrite(Resume r, File file) throws IOException;
-
-    protected abstract Resume doRead(File file) throws IOException;
 }

@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.javawebinar.basejava.ResumeTestData.createResume;
 
 class AbstractStorageTest {
@@ -49,7 +50,7 @@ class AbstractStorageTest {
     void update() {
         Resume newResume = createResume(UUID_1, "Иванов 1");
         storage.update(newResume);
-        assertSame(newResume, storage.get(UUID_1));
+        assertEquals(newResume, storage.get(UUID_1));
     }
 
     @Test
@@ -57,7 +58,7 @@ class AbstractStorageTest {
         assertSize(3);
         List<Resume> expected = Arrays.asList(RESUME_1, RESUME_2, RESUME_3);
         List<Resume> actual = storage.getAllSorted();
-        assertIterableEquals(actual, expected);
+        assertIterableEquals(expected, actual);
     }
 
     @Test
@@ -100,12 +101,12 @@ class AbstractStorageTest {
     @Test
     public void updateNotExist() {
         assertThrows(NotExistStorageException.class, () ->
-                storage.update(createResume("null","Пустозвонов Василий"))
+                storage.update(createResume("null", "Пустозвонов Василий"))
         );
     }
 
     private void assertGet(Resume r) {
-        assertSame(r, storage.get(r.getUuid()));
+        assertEquals(r, storage.get(r.getUuid()));
     }
 
     private void assertSize(int size) {

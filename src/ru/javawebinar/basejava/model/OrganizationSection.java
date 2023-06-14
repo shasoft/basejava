@@ -1,9 +1,10 @@
 package ru.javawebinar.basejava.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrganizationSection extends AbstractSection {
+public class OrganizationSection extends AbstractSection implements Serializable {
     private final List<Organization> organizations = new ArrayList<>();
 
     public List<Organization> getOrganizations() {

@@ -1,8 +1,9 @@
 package ru.javawebinar.basejava.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Period {
+public class Period implements Serializable {
     private String title;
     private String description;
     private LocalDate startDate;
