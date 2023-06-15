@@ -8,8 +8,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.System.exit;
-
 /**
  * Array based storage for Resumes
  */
@@ -27,20 +25,20 @@ public class FileStorage extends AbstractStorage<File> {
         this.serializer = serializer;
     }
 
-    public int size() {
-        String[] list = directory.list();
-        if (list == null) {
-            throw new StorageException("Ошибка получения списка файлов", directory.getName());
+    protected File[] getFiles() {
+        File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException("Directory read error", null);
         }
-        return list.length;
+        return files;
+    }
+
+    public int size() {
+        return getFiles().length;
     }
 
     public void clear() {
-        File[] files = directory.listFiles();
-        if (files == null) {
-            throw new StorageException("Ошибка получения списка файлов", directory.getName());
-        }
-        for (File file : files) {
+        for (File file : getFiles()) {
             doDelete(file);
         }
     }
@@ -52,15 +50,11 @@ public class FileStorage extends AbstractStorage<File> {
     }
 
     protected List<Resume> doCopyAll() {
-        File[] files = directory.listFiles();
-        if (files != null) {
-            List<Resume> ret = new ArrayList<>(files.length);
-            for (File file : files) {
-                ret.add(doGet(file));
-            }
-            return ret;
+        List<Resume> ret = new ArrayList<>();
+        for (File file : getFiles()) {
+            ret.add(doGet(file));
         }
-        return new ArrayList<>(0);
+        return ret;
     }
 
     protected File getSearchKey(String uuid) {
