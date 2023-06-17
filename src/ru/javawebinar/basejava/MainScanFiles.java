@@ -13,7 +13,9 @@ public class MainScanFiles {
         }
      }
     public static void printFile(int indent, File file) throws Exception {
-        System.out.println((file.isFile() ? "Ф":"Д")+"> "+".".repeat(indent)+" "+file.toPath().getFileName());
+        String tab = "";
+        for(int i=0;i<indent;i++) tab+= ".";
+        System.out.println((file.isFile() ? "Ф":"Д")+"> "+tab+" "+file.toPath().getFileName());
         if( file.isDirectory() ) {
             File[] items = file.listFiles();
             for (File item : items) {

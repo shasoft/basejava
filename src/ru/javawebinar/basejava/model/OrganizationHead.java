@@ -1,14 +1,19 @@
 package ru.javawebinar.basejava.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serializable;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class OrganizationHead implements Serializable {
     private String title;
     private String website;
 
+    public OrganizationHead() {
+        this("", "");
+    }
     public OrganizationHead(String title) {
         this(title, "");
-
     }
 
     public OrganizationHead(String title, String website) {

@@ -1,14 +1,20 @@
 package ru.javawebinar.basejava.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private OrganizationHead head;
 
     private final List<Period> periods = new ArrayList<>();
 
+    public Organization() {
+        this.head = new OrganizationHead();
+    }
     public Organization(OrganizationHead head) {
         this.head = head;
     }

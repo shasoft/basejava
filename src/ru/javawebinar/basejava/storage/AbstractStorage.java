@@ -4,6 +4,8 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,6 +14,7 @@ import java.util.List;
 /**
  * Based storage for Resumes
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class AbstractStorage<T> implements Storage {
 
     protected static final Comparator<Resume> RESUME_COMPARATOR =

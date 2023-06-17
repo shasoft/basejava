@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListSection extends AbstractSection implements Serializable {
+public class ListSection extends AbstractSection {
     private final List<String> strings = new ArrayList<>();
 
     public List<String> getStrings() {

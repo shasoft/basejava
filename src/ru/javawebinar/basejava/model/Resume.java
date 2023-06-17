@@ -1,11 +1,16 @@
 package ru.javawebinar.basejava.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.*;
 
 /**
  * ru.javawebinar.basejava.model.Resume class
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Resume implements Comparable<Resume>, Serializable {
 
     // Unique identifier
@@ -46,17 +51,19 @@ public class Resume implements Comparable<Resume>, Serializable {
         Resume resume = (Resume) o;
 
         if (!uuid.equals(resume.uuid)) return false;
-        return fullName.equals(resume.fullName);
+        if (!fullName.equals(resume.fullName)) return false;
+        if (!contacts.equals(resume.contacts)) return false;
+        return sections.equals(resume.sections);
     }
 
     @Override
     public int hashCode() {
-        return uuid.hashCode() ^ fullName.hashCode();
+        return uuid.hashCode() ^ fullName.hashCode() ^ contacts.hashCode() ^ sections.hashCode();
     }
 
     @Override
     public String toString() {
-        return "Resume{uuid="+uuid + ", fullName=" + fullName + "}";
+        return "Resume{uuid="+uuid + ", fullName=" + fullName + ", contacts="+contacts.hashCode()+", sections="+sections.hashCode()+"}";
     }
 
     @Override
