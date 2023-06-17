@@ -15,7 +15,7 @@ public class FileStorage extends AbstractStorage<File> {
 
     protected final File directory;
 
-    private Serializer serializer;
+    private final Serializer serializer;
 
     public FileStorage(File directory, Serializer serializer) {
         if (!directory.isDirectory()) {
