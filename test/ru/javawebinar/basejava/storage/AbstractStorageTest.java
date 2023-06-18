@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.javawebinar.basejava.ResumeTestData.createResume;
 
 class AbstractStorageTest {

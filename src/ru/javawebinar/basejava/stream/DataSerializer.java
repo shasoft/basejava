@@ -1,14 +1,28 @@
+// Функциональные интерфейсы в Java https://javarush.com/groups/posts/2866-funkcionaljhnihe-interfeysih-v-java
 package ru.javawebinar.basejava.stream;
 
 import ru.javawebinar.basejava.model.*;
-import ru.javawebinar.basejava.stream.Serializer;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
 public class DataSerializer implements Serializer {
+
+
+    private <T> void writeCollection(DataOutputStream dos, Collection<T> entrys, EntryWriter<T> action) throws IOException {
+        dos.writeInt(entrys.size());
+        for (T entry : entrys) {
+            action.write(entry);
+        }
+    }
+
+    private <T> void readCollection(DataInputStream dis, EntryReader action) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            action.read();
+        }
+    }
 
     @Override
     public void doWrite(Resume r, OutputStream os) throws IOException {
@@ -16,16 +30,12 @@ public class DataSerializer implements Serializer {
             dos.writeUTF(r.getUuid());
             dos.writeUTF(r.getFullName());
             //
-            Map<ContactType, String> contacts = r.getContacts();
-            dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+            writeCollection(dos, r.getContacts().entrySet(), (entry) -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
-            }
+            });
             //
-            Map<SectionType, AbstractSection> sections = r.getSections();
-            dos.writeInt(sections.size());
-            for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
+            writeCollection(dos, r.getSections().entrySet(), (entry) -> {
                 SectionType type = entry.getKey();
                 dos.writeUTF(type.name());
                 AbstractSection section = entry.getValue();
@@ -36,32 +46,26 @@ public class DataSerializer implements Serializer {
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        List<String> strings = ((ListSection) section).getStrings();
-                        dos.writeInt(strings.size());
-                        for (String str : strings) {
+                        writeCollection(dos, ((ListSection) section).getStrings(), (str) -> {
                             dos.writeUTF(str);
-                        }
+                        });
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
-                        List<Organization> organizations = ((OrganizationSection) section).getOrganizations();
-                        dos.writeInt(organizations.size());
-                        for (Organization organization : organizations) {
+                        writeCollection(dos, ((OrganizationSection) section).getOrganizations(), (organization) -> {
                             dos.writeUTF(organization.getHead().getTitle());
                             dos.writeUTF(organization.getHead().getWebsite());
 
-                            List<Period> periods = organization.getPeriods();
-                            dos.writeInt(periods.size());
-                            for (Period period : periods) {
+                            writeCollection(dos, organization.getPeriods(), (period) -> {
                                 dos.writeUTF(period.getTitle());
                                 dos.writeUTF(period.getStartDate().toString());
                                 dos.writeUTF(period.getEndDate().toString());
                                 dos.writeUTF(period.getDescription());
-                            }
-                        }
+                            });
+                        });
                         break;
                 }
-            }
+            });
         }
     }
 
@@ -71,15 +75,14 @@ public class DataSerializer implements Serializer {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
+            readCollection(dis, () -> {
                 resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            }
+            });
             //
-            int sizeSections = dis.readInt();
-            while(sizeSections>0) {
+            readCollection(dis, () -> {
+
                 SectionType type = SectionType.valueOf(dis.readUTF());
-                AbstractSection section=null;
+                AbstractSection section = null;
                 switch (type) {
                     case PERSONAL:
                     case OBJECTIVE:
@@ -88,41 +91,40 @@ public class DataSerializer implements Serializer {
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         ListSection listSection = new ListSection();
-                        int sizeStrings = dis.readInt();
-                        while(sizeStrings>0) {
+                        readCollection(dis, () -> {
                             listSection.getStrings().add(dis.readUTF());
-                            sizeStrings--;
-                        }
+                        });
                         section = listSection;
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
                         OrganizationSection organizationSection = new OrganizationSection();
-                        int sizeOrganizations = dis.readInt();
-                        while(sizeOrganizations>0) {
-                            Organization organization = new Organization(new OrganizationHead(dis.readUTF(), dis.readUTF()) );
-                            int sizePeriods = dis.readInt();
-                            while(sizePeriods>0) {
-                                organization.getPeriods().add( new Period(
+                        readCollection(dis, () -> {
+                            Organization organization = new Organization(new OrganizationHead(dis.readUTF(), dis.readUTF()));
+                            readCollection(dis, () -> {
+                                organization.getPeriods().add(new Period(
                                         dis.readUTF(),
                                         LocalDate.parse(dis.readUTF()),
                                         LocalDate.parse(dis.readUTF()),
                                         dis.readUTF()
-                                ) );
-                                //
-                                sizePeriods--;
-                            }
+                                ));
+                            });
                             organizationSection.getOrganizations().add(organization);
-                            //
-                            sizeOrganizations--;
-                        }
+                        });
                         section = organizationSection;
                         break;
                 }
-                resume.addSection(type,section);
-                sizeSections--;
-            }
+                resume.addSection(type, section);
+            });
             return resume;
         }
+    }
+
+    private interface EntryWriter<T> {
+        public void write(T t) throws IOException;
+    }
+
+    private interface EntryReader {
+        public void read() throws IOException;
     }
 }
