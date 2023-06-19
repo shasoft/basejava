@@ -6,12 +6,13 @@ import java.io.Serializable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class OrganizationHead implements Serializable {
-    private String title;
-    private String website;
+    private final String title;
+    private final String website;
 
     public OrganizationHead() {
         this("", "");
     }
+
     public OrganizationHead(String title) {
         this(title, "");
     }
@@ -36,8 +37,7 @@ public class OrganizationHead implements Serializable {
         OrganizationHead that = (OrganizationHead) o;
 
         if (!title.equals(that.title)) return false;
-        if (!website.equals(that.website)) return false;
-        return true;
+        return website.equals(that.website);
     }
 
     public int hashCode() {

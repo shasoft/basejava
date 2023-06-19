@@ -1,13 +1,12 @@
 package ru.javawebinar.basejava.model;
 
-import java.io.Serializable;
-
-public class TextSection extends AbstractSection  {
-    private String text;
+public class TextSection extends AbstractSection {
+    private final String text;
 
     public TextSection() {
         this.text = "";
     }
+
     public TextSection(String text) {
         this.text = text;
     }

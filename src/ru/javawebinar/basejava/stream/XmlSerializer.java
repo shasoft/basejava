@@ -1,14 +1,13 @@
 package ru.javawebinar.basejava.stream;
 
 import ru.javawebinar.basejava.model.*;
-import ru.javawebinar.basejava.stream.Serializer;
 import ru.javawebinar.basejava.util.XmlParser;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class XmlSerializer implements Serializer {
-    private XmlParser xmlParser;
+    private final XmlParser xmlParser;
 
     public XmlSerializer() {
         xmlParser = new XmlParser(

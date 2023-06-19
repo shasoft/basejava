@@ -33,7 +33,7 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     protected boolean isExist(Integer searchKey) {
-        return (Integer) searchKey != -1;
+        return searchKey != -1;
     }
 
     protected void doSave(Resume r, Integer searchKey) {
@@ -41,14 +41,14 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     protected void doUpdate(Resume r, Integer searchKey) {
-        items.set((Integer) searchKey, r);
+        items.set(searchKey, r);
     }
 
     protected void doDelete(Integer searchKey) {
-        items.remove((int) (Integer) searchKey);
+        items.remove((int) searchKey);
     }
 
     protected Resume doGet(Integer searchKey) {
-        return items.get((Integer) searchKey);
+        return items.get(searchKey);
     }
 }

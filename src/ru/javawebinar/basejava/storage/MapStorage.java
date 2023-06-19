@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Array based storage for Resumes
  */
-public class MapStorage extends AbstractStorage {
+public class MapStorage extends AbstractStorage<Object> {
     protected Map<String, Resume> storage = new HashMap<>();
 
     public int size() {

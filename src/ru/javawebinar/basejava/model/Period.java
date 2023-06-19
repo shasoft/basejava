@@ -23,6 +23,7 @@ public class Period implements Serializable {
 
     public Period() {
     }
+
     public Period(String title, LocalDate startDate, LocalDate endDate) {
         this(title, startDate, endDate, "");
     }
@@ -59,13 +60,13 @@ public class Period implements Serializable {
         if (!title.equals(that.title)) return false;
         if (!startDate.equals(that.startDate)) return false;
         if (!endDate.equals(that.endDate)) return false;
-        if (!description.equals(that.description)) return false;
-        return true;
+        return description.equals(that.description);
     }
 
     public int hashCode() {
         return title.hashCode() ^ startDate.hashCode() ^ endDate.hashCode() ^ description.hashCode();
     }
+
     public String toString() {
         return "Period{" +
                 "title=" + title +

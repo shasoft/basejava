@@ -9,7 +9,7 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private final List<Period> periods;
-    private OrganizationHead head;
+    private final OrganizationHead head;
 
     public Organization(OrganizationHead head, List<Period> periods) {
         this.head = head;
@@ -38,9 +38,7 @@ public class Organization implements Serializable {
 
         Organization that = (Organization) o;
 
-        if (!head.equals(that.head)) return false;
-        return true;
-
+        return head.equals(that.head);
     }
 
     public int hashCode() {
