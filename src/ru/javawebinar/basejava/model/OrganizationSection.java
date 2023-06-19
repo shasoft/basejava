@@ -5,8 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrganizationSection extends AbstractSection implements Serializable {
-    private final List<Organization> organizations = new ArrayList<>();
+    private final List<Organization> organizations;
 
+    public OrganizationSection() {
+        organizations = new ArrayList<>();
+    }
+    public OrganizationSection(List<Organization> organizations) {
+        this.organizations = organizations;
+    }
     public List<Organization> getOrganizations() {
         return organizations;
     }

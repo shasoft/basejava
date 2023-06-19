@@ -5,7 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListSection extends AbstractSection {
-    private final List<String> strings = new ArrayList<>();
+    private final List<String> strings;
+
+    public ListSection() {
+        strings = new ArrayList<>();
+    }
+    public ListSection(List<String> strings) {
+        this.strings = strings;
+    }
 
     public List<String> getStrings() {
         return strings;

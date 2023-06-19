@@ -5,24 +5,11 @@ import ru.javawebinar.basejava.model.*;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class DataSerializer implements Serializer {
-
-
-    private <T> void writeCollection(DataOutputStream dos, Collection<T> entrys, EntryWriter<T> action) throws IOException {
-        dos.writeInt(entrys.size());
-        for (T entry : entrys) {
-            action.write(entry);
-        }
-    }
-
-    private <T> void readCollection(DataInputStream dis, EntryReader action) throws IOException {
-        int size = dis.readInt();
-        for (int i = 0; i < size; i++) {
-            action.read();
-        }
-    }
 
     @Override
     public void doWrite(Resume r, OutputStream os) throws IOException {
@@ -90,34 +77,61 @@ public class DataSerializer implements Serializer {
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        ListSection listSection = new ListSection();
-                        readCollection(dis, () -> {
-                            listSection.getStrings().add(dis.readUTF());
-                        });
-                        section = listSection;
+                        section = new ListSection(readList(dis, () -> {
+                            return dis.readUTF();
+                        }));
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
-                        OrganizationSection organizationSection = new OrganizationSection();
-                        readCollection(dis, () -> {
-                            Organization organization = new Organization(new OrganizationHead(dis.readUTF(), dis.readUTF()));
-                            readCollection(dis, () -> {
-                                organization.getPeriods().add(new Period(
-                                        dis.readUTF(),
-                                        LocalDate.parse(dis.readUTF()),
-                                        LocalDate.parse(dis.readUTF()),
-                                        dis.readUTF()
-                                ));
-                            });
-                            organizationSection.getOrganizations().add(organization);
-                        });
-                        section = organizationSection;
+                        section = new OrganizationSection(readList(dis, () -> {
+                            return new Organization(
+                                    new OrganizationHead(dis.readUTF(), dis.readUTF()),
+                                    readList(dis, () -> {
+                                        return new Period(
+                                                dis.readUTF(),
+                                                LocalDate.parse(dis.readUTF()),
+                                                LocalDate.parse(dis.readUTF()),
+                                                dis.readUTF()
+                                        );
+                                    })
+                            );
+                        }));
                         break;
                 }
                 resume.addSection(type, section);
             });
             return resume;
         }
+    }
+
+    private <T> void writeCollection(DataOutputStream dos, Collection<T> entrys, EntryWriter<T> action) throws IOException {
+        dos.writeInt(entrys.size());
+        for (T entry : entrys) {
+            action.write(entry);
+        }
+    }
+
+    private <T> void readCollection(DataInputStream dis, EntryReader action) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            action.read();
+        }
+    }
+
+    private <T> void readList(DataInputStream dis, EntryReader action) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            action.read();
+        }
+    }
+
+    private <T> List<T> readList(DataInputStream dis, EntryCreateAndReader<T> action) throws IOException {
+        int size = dis.readInt();
+        List<T> list = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            list.add(action.read());
+        }
+        return list;
     }
 
     private interface EntryWriter<T> {
@@ -127,4 +141,9 @@ public class DataSerializer implements Serializer {
     private interface EntryReader {
         public void read() throws IOException;
     }
+
+    private interface EntryCreateAndReader<T> {
+        public T read() throws IOException;
+    }
+
 }

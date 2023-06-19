@@ -8,15 +8,20 @@ import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
+    private final List<Period> periods;
     private OrganizationHead head;
 
-    private final List<Period> periods = new ArrayList<>();
+    public Organization(OrganizationHead head, List<Period> periods) {
+        this.head = head;
+        this.periods = periods;
+    }
+
+    public Organization(OrganizationHead head) {
+        this(head, new ArrayList<>());
+    }
 
     public Organization() {
-        this.head = new OrganizationHead();
-    }
-    public Organization(OrganizationHead head) {
-        this.head = head;
+        this(new OrganizationHead(), new ArrayList<>());
     }
 
     public OrganizationHead getHead() {
@@ -41,6 +46,7 @@ public class Organization implements Serializable {
     public int hashCode() {
         return head.hashCode() ^ periods.hashCode();
     }
+
     public String toString() {
         return "Organization{" +
                 "head=" + head.toString() +
