@@ -6,39 +6,28 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class SqlHelper {
 
     private final ConnectionFactory connectionFactory;
 
-    public SqlHelper(String dbUrl, String dbUser, String dbPassword) {
-        connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+    public SqlHelper(Properties storage) {
+        connectionFactory = () -> DriverManager.getConnection(
+                storage.getProperty("db.url"),
+                storage.getProperty("db.user"),
+                storage.getProperty("db.password")
+        );
     }
 
-    public <T> T exec(String sql, Process<T> action, String... args) {
-        /*
-        System.out.println("sql: " + sql);
-        for (String arg : args) {
-            System.out.println(" \t\t" + arg);
-        }
-        //*/
-
+    public <T> T exec(String sql, Process<T> action) {
+        //System.out.println("sql: " + sql);
         try (Connection conn = connectionFactory.getConnection()) {
             PreparedStatement ps = conn.prepareStatement(sql);
-            for (int i = 0; i < args.length; i++) {
-                ps.setString(i + 1, args[i]);
-            }
             return action.process(ps);
         } catch (SQLException e) {
             throw new StorageException(e.toString(), null);
         }
-    }
-
-    public void exec(String sql, String... args) {
-        exec(sql, (ps) -> {
-            ps.execute();
-            return null;
-        }, args);
     }
 
     public void exec(String sql) {
