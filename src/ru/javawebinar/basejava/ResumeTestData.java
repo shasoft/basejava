@@ -1,26 +1,30 @@
 package ru.javawebinar.basejava;
 
-import ru.javawebinar.basejava.model.*;
+import ru.javawebinar.basejava.model.AbstractSection;
+import ru.javawebinar.basejava.model.ContactType;
+import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.SectionType;
 
-import java.time.LocalDate;
 import java.util.Map;
 
 public class ResumeTestData {
     public static void main(String[] args) {
         Resume resume = createResume("1", "Григорий Кислин");
 
-        System.out.println(resume.getUuid()+" "+resume.getFullName());
+        System.out.println(resume.getUuid() + " " + resume.getFullName());
         for (Map.Entry<ContactType, String> entry : resume.getContacts().entrySet()) {
-            System.out.println("\t"+entry.getKey().getTitle() + ": " + entry.getValue());
+            System.out.println("\t" + entry.getKey().getTitle() + ": " + entry.getValue());
         }
         for (Map.Entry<SectionType, AbstractSection> entry : resume.getSections().entrySet()) {
-            System.out.println("\t*** "+entry.getKey().getTitle()+" ***");
-            System.out.println("\t\t"+entry.getValue().toString());
+            System.out.println("\t*** " + entry.getKey().getTitle() + " ***");
+            System.out.println("\t\t" + entry.getValue().toString());
         }
     }
+
     public static Resume createResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
+        /*
         resume.addContact(ContactType.PHONE, "+7(921) 855-0482");
         resume.addContact(ContactType.SKYPE, "grigory.kislin");
         resume.addContact(ContactType.EMAIL, "gkislin@yandex.ru");
@@ -188,6 +192,7 @@ public class ResumeTestData {
                 LocalDate.of(1987, 6, 1)
         ));
         education.getOrganizations().add(organization);
+        */
 
         return resume;
     }

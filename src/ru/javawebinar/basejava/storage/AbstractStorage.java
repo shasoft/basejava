@@ -6,7 +6,6 @@ import ru.javawebinar.basejava.model.Resume;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -18,6 +17,7 @@ public abstract class AbstractStorage<T> implements Storage {
 
     protected static final Comparator<Resume> RESUME_COMPARATOR =
             Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
+
     protected abstract T getSearchKey(String uuid);
 
     protected abstract boolean isExist(T searchKey);
@@ -54,7 +54,7 @@ public abstract class AbstractStorage<T> implements Storage {
 
     public List<Resume> getAllSorted() {
         List<Resume> items = doCopyAll();
-        Collections.sort(items, RESUME_COMPARATOR);
+        items.sort(RESUME_COMPARATOR);
         return items;
     }
 

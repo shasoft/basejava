@@ -4,7 +4,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import java.util.*;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * ru.javawebinar.basejava.model.Resume class
@@ -18,7 +20,7 @@ public class Resume implements Comparable<Resume>, Serializable {
 
     private final String fullName;
 
-    private final EnumMap <ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private final EnumMap<ContactType, String> contacts = new EnumMap<>(ContactType.class);
 
     private final EnumMap<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
@@ -31,7 +33,7 @@ public class Resume implements Comparable<Resume>, Serializable {
     }
 
     public Resume(String uuid, String fullName) {
-        this.uuid = uuid;
+        this.uuid = uuid.trim();
         this.fullName = fullName;
     }
 
@@ -63,7 +65,7 @@ public class Resume implements Comparable<Resume>, Serializable {
 
     @Override
     public String toString() {
-        return "Resume{uuid="+uuid + ", fullName=" + fullName + ", contacts="+contacts.hashCode()+", sections="+sections.hashCode()+"}";
+        return "Resume{uuid=" + uuid + ", fullName=" + fullName + ", contacts=" + contacts.hashCode() + ", sections=" + sections.hashCode() + "}";
     }
 
     @Override
