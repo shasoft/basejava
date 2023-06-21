@@ -1,7 +1,5 @@
 package ru.javawebinar.basejava.storage;
 
-import org.postgresql.util.PSQLException;
-import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.sql.SqlHelper;
@@ -9,14 +7,12 @@ import ru.javawebinar.basejava.sql.SqlHelper;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
 
 public class SqlStorage implements Storage {
     private final SqlHelper sqlHelper;
 
-    public SqlStorage(Properties storage) {
-        sqlHelper = new SqlHelper(storage);
+    public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
+        sqlHelper = new SqlHelper(dbUrl, dbUser, dbPassword);
     }
 
     @Override
@@ -53,15 +49,7 @@ public class SqlStorage implements Storage {
         sqlHelper.exec("INSERT INTO resume (uuid, full_name) VALUES (?,?)", (ps) -> {
             ps.setString(1, r.getUuid());
             ps.setString(2, r.getFullName());
-            try {
-                ps.executeUpdate();
-            } catch (PSQLException e) {
-                // ERROR:  23505: duplicate key
-                if (Objects.equals(e.getSQLState(), "23505")) {
-                    throw new ExistStorageException(r.getUuid());
-                }
-                throw e;
-            }
+            ps.executeUpdate();
             return null;
         });
     }

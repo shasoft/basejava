@@ -1,23 +1,20 @@
 package ru.javawebinar.basejava.sql;
 
+import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.StorageException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Properties;
+import java.util.Objects;
 
 public class SqlHelper {
 
     private final ConnectionFactory connectionFactory;
 
-    public SqlHelper(Properties storage) {
-        connectionFactory = () -> DriverManager.getConnection(
-                storage.getProperty("db.url"),
-                storage.getProperty("db.user"),
-                storage.getProperty("db.password")
-        );
+    public SqlHelper(String dbUrl, String dbUser, String dbPassword) {
+        connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
     }
 
     public <T> T exec(String sql, Process<T> action) {
@@ -26,6 +23,10 @@ public class SqlHelper {
             PreparedStatement ps = conn.prepareStatement(sql);
             return action.process(ps);
         } catch (SQLException e) {
+            // ERROR:  23505: duplicate key
+            if (Objects.equals(e.getSQLState(), "23505")) {
+                throw new ExistStorageException(e.toString());
+            }
             throw new StorageException(e.toString(), null);
         }
     }
