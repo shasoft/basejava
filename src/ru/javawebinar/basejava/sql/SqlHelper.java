@@ -1,5 +1,6 @@
 package ru.javawebinar.basejava.sql;
 
+import org.postgresql.util.PSQLException;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.StorageException;
 
@@ -7,7 +8,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Objects;
 
 public class SqlHelper {
 
@@ -17,28 +17,58 @@ public class SqlHelper {
         connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
     }
 
-    public <T> T exec(String sql, Process<T> action) {
+    public <T> T execute(String sql, Process<T> action) {
         //System.out.println("sql: " + sql);
         try (Connection conn = connectionFactory.getConnection()) {
             PreparedStatement ps = conn.prepareStatement(sql);
             return action.process(ps);
         } catch (SQLException e) {
-            // ERROR:  23505: duplicate key
-            if (Objects.equals(e.getSQLState(), "23505")) {
-                throw new ExistStorageException(e.toString());
-            }
-            throw new StorageException(e.toString(), null);
+            myThrowException(e);
+            return null;
         }
     }
 
-    public void exec(String sql) {
-        exec(sql, (ps) -> {
+    public void execute(String sql) {
+        execute(sql, (ps) -> {
             ps.execute();
             return null;
         });
     }
 
+    public <T> T executeBatch(SqlTransaction<T> executor) {
+        try (Connection conn = connectionFactory.getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                T res = executor.execute(conn);
+                conn.commit();
+                return res;
+            } catch (SQLException e) {
+                conn.rollback();
+                myThrowException(e);
+                return null;
+            }
+        } catch (Exception e) {
+            throw new StorageException(e.getMessage(), null);
+        }
+    }
+
+    private void myThrowException(SQLException e) {
+        if (e instanceof PSQLException) {
+
+            // http://www.postgresql.org/docs/9.3/static/errcodes-appendix.html
+            if (e.getSQLState().equals("23505")) {
+                throw new ExistStorageException(e.toString());
+            }
+        }
+        throw new StorageException(e.toString(), null);
+    }
+
+    public interface SqlTransaction<T> {
+        T execute(Connection conn) throws SQLException;
+    }
+
     public interface Process<T> {
         T process(PreparedStatement ps) throws SQLException;
     }
+
 }
