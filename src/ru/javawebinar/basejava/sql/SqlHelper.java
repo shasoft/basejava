@@ -45,11 +45,11 @@ public class SqlHelper {
             } catch (SQLException e) {
                 conn.rollback();
                 myThrowException(e);
-                return null;
             }
-        } catch (Exception e) {
-            throw new StorageException(e.getMessage(), null);
+        } catch (SQLException e) {
+            myThrowException(e);
         }
+        return null;
     }
 
     private void myThrowException(SQLException e) {
