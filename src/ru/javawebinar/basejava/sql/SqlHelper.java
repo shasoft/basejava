@@ -23,8 +23,7 @@ public class SqlHelper {
             PreparedStatement ps = conn.prepareStatement(sql);
             return action.process(ps);
         } catch (SQLException e) {
-            myThrowException(e);
-            return null;
+            throw myThrowException(e);
         }
     }
 
@@ -35,36 +34,34 @@ public class SqlHelper {
         });
     }
 
-    public <T> T executeBatch(SqlTransaction<T> executor) {
+    public void executeBatch(SqlTransaction executor) {
         try (Connection conn = connectionFactory.getConnection()) {
             try {
                 conn.setAutoCommit(false);
-                T res = executor.execute(conn);
+                executor.execute(conn);
                 conn.commit();
-                return res;
             } catch (SQLException e) {
                 conn.rollback();
-                myThrowException(e);
+                throw myThrowException(e);
             }
         } catch (SQLException e) {
-            myThrowException(e);
+            throw myThrowException(e);
         }
-        return null;
     }
 
-    private void myThrowException(SQLException e) {
+    private StorageException myThrowException(SQLException e) {
         if (e instanceof PSQLException) {
 
             // http://www.postgresql.org/docs/9.3/static/errcodes-appendix.html
             if (e.getSQLState().equals("23505")) {
-                throw new ExistStorageException(e.toString());
+                return new ExistStorageException(e.toString());
             }
         }
-        throw new StorageException(e.toString(), null);
+        return new StorageException(e.toString(), null);
     }
 
-    public interface SqlTransaction<T> {
-        T execute(Connection conn) throws SQLException;
+    public interface SqlTransaction {
+        void execute(Connection conn) throws SQLException;
     }
 
     public interface Process<T> {

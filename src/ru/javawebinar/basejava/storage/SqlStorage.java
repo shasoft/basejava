@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +40,7 @@ public class SqlStorage implements Storage {
                     }
                     Resume r = new Resume(uuid, rs.getString("full_name"));
                     do {
-                        addContectToResume(rs, r);
+                        addContactToResume(rs, r);
                     } while (rs.next());
 
                     return r;
@@ -59,7 +59,6 @@ public class SqlStorage implements Storage {
             }
             deleteContactsFromDb(r.getUuid());
             insertContactsToDb(conn, r);
-            return null;
         });
     }
 
@@ -72,7 +71,6 @@ public class SqlStorage implements Storage {
                         ps.execute();
                     }
                     insertContactsToDb(conn, r);
-                    return null;
                 }
         );
     }
@@ -97,13 +95,13 @@ public class SqlStorage implements Storage {
                         "        ON r.uuid = c.resume_uuid" +
                         "  ORDER BY full_name, uuid", ps -> {
                     ResultSet rs = ps.executeQuery();
-                    Map<String, Resume> resumes = new HashMap<>();
+                    Map<String, Resume> resumes = new LinkedHashMap<>();
                     while (rs.next()) {
                         String uuid = rs.getString("uuid");
                         if (!resumes.containsKey(uuid)) {
                             resumes.put(uuid, new Resume(uuid, rs.getString("full_name")));
                         }
-                        addContectToResume(rs, resumes.get(uuid));
+                        addContactToResume(rs, resumes.get(uuid));
                     }
                     return new ArrayList<>(resumes.values());
                 });
@@ -137,9 +135,13 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void addContectToResume(ResultSet rs, Resume r) throws SQLException {
-        String value = rs.getString("value");
+    private void addContactToResume(ResultSet rs, Resume r) throws SQLException {
         String type = rs.getString("type");
-        r.addContact(ContactType.valueOf(type), value);
+        if (type != null) {
+            r.addContact(
+                    ContactType.valueOf(type),
+                    rs.getString("value")
+            );
+        }
     }
 }
