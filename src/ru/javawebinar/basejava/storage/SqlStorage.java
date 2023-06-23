@@ -203,11 +203,9 @@ public class SqlStorage implements Storage {
         if (typeName != null) {
             SectionType type = SectionType.valueOf(typeName);
             switch (type) {
-                case PERSONAL, OBJECTIVE:
-                    r.addSection(type, new TextSection(rs.getString("value")));
-                    break;
-                case ACHIEVEMENT, QUALIFICATIONS:
-                    r.addSection(type, new ListSection(List.of(rs.getString("value").split("\n"))));
+                case PERSONAL, OBJECTIVE -> r.addSection(type, new TextSection(rs.getString("value")));
+                case ACHIEVEMENT, QUALIFICATIONS ->
+                        r.addSection(type, new ListSection(List.of(rs.getString("value").split("\n"))));
             }
         }
     }
