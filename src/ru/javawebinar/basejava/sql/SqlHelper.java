@@ -34,12 +34,13 @@ public class SqlHelper {
         });
     }
 
-    public void executeBatch(SqlTransaction executor) {
+    public <T> T executeBatch(SqlTransaction<T> action) {
         try (Connection conn = connectionFactory.getConnection()) {
             try {
                 conn.setAutoCommit(false);
-                executor.execute(conn);
+                T ret = action.process(conn);
                 conn.commit();
+                return ret;
             } catch (SQLException e) {
                 conn.rollback();
                 throw myThrowException(e);
@@ -60,8 +61,8 @@ public class SqlHelper {
         return new StorageException(e.toString(), null);
     }
 
-    public interface SqlTransaction {
-        void execute(Connection conn) throws SQLException;
+    public interface SqlTransaction<T> {
+        T process(Connection conn) throws SQLException;
     }
 
     public interface Process<T> {

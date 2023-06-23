@@ -59,6 +59,7 @@ public class SqlStorage implements Storage {
             }
             deleteContactsFromDb(r.getUuid());
             insertContactsToDb(conn, r);
+            return null;
         });
     }
 
@@ -71,6 +72,7 @@ public class SqlStorage implements Storage {
                         ps.execute();
                     }
                     insertContactsToDb(conn, r);
+                    return null;
                 }
         );
     }
@@ -89,6 +91,28 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
+        return sqlHelper.executeBatch((conn) -> {
+                    Map<String, Resume> resumes = new LinkedHashMap<>();
+                    PreparedStatement ps;
+                    ResultSet rs;
+
+                    ps = conn.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid");
+                    rs = ps.executeQuery();
+                    while (rs.next()) {
+                        String uuid = rs.getString("uuid");
+                        resumes.put(uuid, new Resume(uuid, rs.getString("full_name")));
+                    }
+
+                    ps = conn.prepareStatement("SELECT * FROM contact");
+                    rs = ps.executeQuery();
+                    while (rs.next()) {
+                        addContactToResume(rs, resumes.get(rs.getString("resume_uuid")));
+                    }
+
+                    return new ArrayList<>(resumes.values());
+                }
+        );
+        /*
         return sqlHelper.execute(
                 "    SELECT * FROM resume r " +
                         " LEFT JOIN contact c " +
@@ -105,6 +129,7 @@ public class SqlStorage implements Storage {
                     }
                     return new ArrayList<>(resumes.values());
                 });
+         */
     }
 
     @Override
