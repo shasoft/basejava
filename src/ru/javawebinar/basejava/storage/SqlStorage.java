@@ -29,29 +29,30 @@ public class SqlStorage implements Storage {
     public Resume get(String uuid) {
         return sqlHelper.executeBatch(conn -> {
             Resume resume;
-            PreparedStatement ps;
-            ResultSet rs;
 
-            ps = conn.prepareStatement("SELECT * FROM resume WHERE uuid = ?");
-            ps.setString(1, uuid);
-            rs = ps.executeQuery();
-            if (!rs.next()) {
-                throw new NotExistStorageException(uuid);
-            }
-            resume = new Resume(uuid, rs.getString("full_name"));
-
-            ps = conn.prepareStatement("SELECT * FROM contact WHERE resume_uuid = ?");
-            ps.setString(1, uuid);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                addContactToResume(rs, resume);
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume WHERE uuid = ?")) {
+                ps.setString(1, uuid);
+                ResultSet rs = ps.executeQuery();
+                if (!rs.next()) {
+                    throw new NotExistStorageException(uuid);
+                }
+                resume = new Resume(uuid, rs.getString("full_name"));
             }
 
-            ps = conn.prepareStatement("SELECT * FROM section WHERE resume_uuid = ?");
-            ps.setString(1, uuid);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                addSectionToResume(rs, resume);
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact WHERE resume_uuid = ?")) {
+                ps.setString(1, uuid);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    addContactToResume(rs, resume);
+                }
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM section WHERE resume_uuid = ?")) {
+                ps.setString(1, uuid);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    addSectionToResume(rs, resume);
+                }
             }
 
             return resume;
@@ -109,26 +110,27 @@ public class SqlStorage implements Storage {
     public List<Resume> getAllSorted() {
         return sqlHelper.executeBatch((conn) -> {
             Map<String, Resume> resumes = new LinkedHashMap<>();
-            PreparedStatement ps;
-            ResultSet rs;
 
-            ps = conn.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid");
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                String uuid = rs.getString("uuid");
-                resumes.put(uuid, new Resume(uuid, rs.getString("full_name")));
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    String uuid = rs.getString("uuid");
+                    resumes.put(uuid, new Resume(uuid, rs.getString("full_name")));
+                }
             }
 
-            ps = conn.prepareStatement("SELECT * FROM contact");
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                addContactToResume(rs, resumes.get(rs.getString("resume_uuid")));
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    addContactToResume(rs, resumes.get(rs.getString("resume_uuid")));
+                }
             }
 
-            ps = conn.prepareStatement("SELECT * FROM section");
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                addSectionToResume(rs, resumes.get(rs.getString("resume_uuid")));
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM section")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    addSectionToResume(rs, resumes.get(rs.getString("resume_uuid")));
+                }
             }
 
             return new ArrayList<>(resumes.values());
