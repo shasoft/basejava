@@ -5,13 +5,48 @@
          version="3.0">
 
     <servlet>
-        <servlet-name>basejavaServlet</servlet-name>
-        <servlet-class>ru.javawebinar.basejava.web.ResumeServlet</servlet-class>
+        <servlet-name>ControllerList</servlet-name>
+        <servlet-class>ru.javawebinar.basejava.web.ControllerList</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ControllerView</servlet-name>
+        <servlet-class>ru.javawebinar.basejava.web.ControllerView</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ControllerEdit</servlet-name>
+        <servlet-class>ru.javawebinar.basejava.web.ControllerEdit</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>basejavaServlet</servlet-name>
+        <servlet-name>ControllerList</servlet-name>
         <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ControllerView</servlet-name>
+        <url-pattern>/view</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ControllerEdit</servlet-name>
+        <url-pattern>/edit</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.png</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.jpg</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.css</url-pattern>
     </servlet-mapping>
 
 </web-app>
