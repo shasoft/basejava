@@ -70,12 +70,17 @@ public class ControllerEdit extends ResumeServlet {
                 }
             }
         }
-        if (hasNew) {
-            storage.save(resume);
+        if(full_name.isEmpty()) {
+            request.setAttribute("resume", resume);
+            request.getRequestDispatcher("/WEB-INF/jsp/edit.jsp").forward(request, response);
         } else {
-            storage.update(resume);
+            if (hasNew) {
+                storage.save(resume);
+            } else {
+                storage.update(resume);
+            }
+            response.sendRedirect("/resume/");
         }
-        response.sendRedirect("/resume/");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

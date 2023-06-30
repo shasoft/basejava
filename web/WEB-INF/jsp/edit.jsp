@@ -81,16 +81,10 @@
             <% }
                 if (sectionName.equals("ListSection")) {
                     ListSection listSection = (ListSection) section;
+                    String value = String.join("\n", listSection.getStrings());
             %>
             <label>
-<textarea name="section<%=sectionType.name()%>" rows="16" cols="120">
-<%
-    for (String text : listSection.getStrings()) {
-%><%=text%>
-<%
-    }
-%>
-</textarea>
+                <textarea name="section<%=sectionType.name()%>" rows="16" cols="120"><%=value%></textarea>
             </label>
             <%
                 }
