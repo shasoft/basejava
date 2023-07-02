@@ -17,10 +17,10 @@
 <div class="scrollable-panel">
     <div class="table-wrapper">
         <div class="add-resume">
-            <a class="no-underline-anchor" href="edit">
+            <a class="no-underline-anchor" href="edit?mode=add">
                 <img src="img/add.png" alt="">
             </a>
-            <a class="text-anchor" href="edit">
+            <a class="text-anchor" href="edit?mode=add">
                 <p class="add-resume-title">Добавить резюме</p>
             </a>
         </div>
@@ -50,11 +50,11 @@
                         <% } %>
                     </td>
                     <td class="img-column">
-                        <a class="no-underline-anchor" href="edit?uuid=<%=resume.getUuid()%>">
+                        <a class="no-underline-anchor" href="edit?uuid=<%=resume.getUuid()%>&mode=edit">
                             <img src="img/pencil.png" title="Изменить" alt="Изменить">
                         </a>
                         &nbsp
-                        <a class="no-underline-anchor" href="edit?delete&uuid=<%=resume.getUuid()%>">
+                        <a class="no-underline-anchor" href="edit?delete&uuid=<%=resume.getUuid()%>&mode=delete">
                             <img src="img/delete.png" title="Удалить" alt="Удалить">
                         </a>
 

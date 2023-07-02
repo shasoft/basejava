@@ -14,10 +14,11 @@ public class ControllerEdit extends ResumeServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
-        boolean hasNew = (uuid.trim().length() == 0);
+        String mode = request.getParameter("mode");
+        boolean hasAdd = mode.equals("add");
         String full_name = request.getParameter("full_name").trim();
         Resume resume;
-        if (hasNew) {
+        if (hasAdd) {
             resume = new Resume(UUID.randomUUID().toString(), full_name);
         } else {
             resume = new Resume(uuid, full_name);
@@ -70,11 +71,12 @@ public class ControllerEdit extends ResumeServlet {
                 }
             }
         }
-        if(full_name.isEmpty()) {
+        if (full_name.isEmpty()) {
             request.setAttribute("resume", resume);
+            request.setAttribute("mode", mode);
             request.getRequestDispatcher("/WEB-INF/jsp/edit.jsp").forward(request, response);
         } else {
-            if (hasNew) {
+            if (hasAdd) {
                 storage.save(resume);
             } else {
                 storage.update(resume);
@@ -85,19 +87,19 @@ public class ControllerEdit extends ResumeServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String uuid = request.getParameter("uuid");
-        boolean hasDelete = request.getParameter("delete") != null;
-        if (hasDelete) {
+        String mode = request.getParameter("mode");
+        if (mode.equals("delete")) {
             storage.delete(uuid);
             response.sendRedirect("/resume/");
         } else {
-            Resume resume = null;
-            if (uuid != null) {
+            Resume resume;
+            if (mode.equals("edit")) {
                 resume = storage.get(uuid);
-            }
-            if (resume == null) {
+            } else {
                 resume = new Resume("", "Новый раб");
             }
             request.setAttribute("resume", resume);
+            request.setAttribute("mode", mode);
             request.getRequestDispatcher("/WEB-INF/jsp/edit.jsp").forward(request, response);
         }
     }

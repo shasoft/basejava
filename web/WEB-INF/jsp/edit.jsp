@@ -23,6 +23,7 @@
     <center><input type="submit" value="Сохранить"></center>
     <hr/>
     <input name="uuid" type="hidden" value="<%=resume.getUuid()%>">
+    <input name="mode" type="hidden" value="<%=request.getAttribute("mode")%>">
     <div class="scrollable-panel">
         <div class="form-wrapper">
             <label>
