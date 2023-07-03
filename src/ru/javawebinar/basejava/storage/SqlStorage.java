@@ -3,6 +3,7 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.sql.SqlHelper;
+import ru.javawebinar.basejava.util.JsonParser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -181,19 +182,11 @@ public class SqlStorage implements Storage {
     }
 
     private void insertSectionsToDb(Connection conn, Resume r) throws SQLException {
-        String value;
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO section (resume_uuid, type, value) VALUES (?,?,?)")) {
             for (Map.Entry<SectionType, AbstractSection> e : r.getSections().entrySet()) {
                 ps.setString(1, r.getUuid());
                 ps.setString(2, e.getKey().name());
-                AbstractSection section = e.getValue();
-                switch (e.getKey()) {
-                    case PERSONAL, OBJECTIVE -> value = ((TextSection) section).getText();
-                    case ACHIEVEMENT, QUALIFICATIONS -> value = String.join("\n", ((ListSection) section).getStrings());
-                    //case EXPERIENCE, EDUCATION ->
-                    default -> value = "";
-                }
-                ps.setString(3, value);
+                ps.setString(3, JsonParser.GSON.toJson(e.getValue(), AbstractSection.class));
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -204,11 +197,7 @@ public class SqlStorage implements Storage {
         String typeName = rs.getString("type");
         if (typeName != null) {
             SectionType type = SectionType.valueOf(typeName);
-            switch (type) {
-                case PERSONAL, OBJECTIVE -> r.addSection(type, new TextSection(rs.getString("value")));
-                case ACHIEVEMENT, QUALIFICATIONS ->
-                        r.addSection(type, new ListSection(List.of(rs.getString("value").split("\n"))));
-            }
+            r.addSection(type, JsonParser.GSON.fromJson(rs.getString("value"), AbstractSection.class));
         }
     }
 }

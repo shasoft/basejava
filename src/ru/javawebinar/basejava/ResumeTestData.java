@@ -1,7 +1,9 @@
 package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.*;
+import ru.javawebinar.basejava.util.DateUtil;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 public class ResumeTestData {
@@ -58,7 +60,6 @@ public class ResumeTestData {
         qualifications.getStrings().add("Отличное знание и опыт применения концепций ООП, SOA, шаблонов проектрирования, архитектурных шаблонов, UML, функционального программирования");
         qualifications.getStrings().add("Родной русский, английский \"upper intermediate\"");
 
-        /*
         Organization organization;
 
         OrganizationSection experience = (OrganizationSection) resume.addSection(SectionType.EXPERIENCE, new OrganizationSection());
@@ -67,7 +68,7 @@ public class ResumeTestData {
         organization.getPeriods().add(new Period(
                 "Автор проекта.",
                 LocalDate.of(2013, 10, 1),
-                LocalDate.now(),
+                DateUtil.NOW,
                 "Создание, организация и проведение Java онлайн проектов и стажировок."
         ));
         experience.getOrganizations().add(organization);
@@ -189,7 +190,6 @@ public class ResumeTestData {
                 LocalDate.of(1987, 6, 1)
         ));
         education.getOrganizations().add(organization);
-        */
 
         return resume;
     }

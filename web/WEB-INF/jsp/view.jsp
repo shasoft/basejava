@@ -1,16 +1,10 @@
-<%@ page import="ru.javawebinar.basejava.model.ContactType" %>
-<%@ page import="ru.javawebinar.basejava.model.Resume" %>
-<%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="ru.javawebinar.basejava.model.SectionType" %>
-<%@ page import="ru.javawebinar.basejava.model.AbstractSection" %>
-<%@ page import="ru.javawebinar.basejava.model.TextSection" %>
-<%@ page import="ru.javawebinar.basejava.model.ListSection" %>
+<%@ page import="ru.javawebinar.basejava.model.*" %>
+<%@ page import="ru.javawebinar.basejava.util.DateUtil" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="css/theme/light.css">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/view-resume-styles.css">
@@ -69,20 +63,34 @@
         </ul>
         <% }
         }
-            if (sectionName.equals("OrganizationSection")) { %>
+            if (sectionName.equals("OrganizationSection")) {
+                OrganizationSection section = (OrganizationSection) entry.getValue();
+                for (Organization org : section.getOrganizations()) {
+        %>
         <div class="section-wrapper">
-            <div class="job-name"><a class="contact-link"
-                                     href="http://javaops.ru/">Java Online Projects</a></div>
-            <div class="period-position">
-                <div class="period">10/2013 - Сейчас
-                </div>
-                <div class="position">Автор проекта.</div>
+            <div class="job-name">
+                <% if (!org.getHead().getWebsite().isEmpty()) { %>
+                <a class="contact-link" href="<%=org.getHead().getWebsite()%>"><%=org.getHead().getTitle()%>
+                </a>
+                <% } else {%>
+                <%=org.getHead().getTitle()%>
+                <% } %>
             </div>
-            <div class="description">Создание, организация и проведение Java онлайн проектов и стажировок.</div>
+            <% for (Period period : org.getPeriods()) { %>
+            <div class="period-position">
+                <div class="period"><%=DateUtil.toString(period.getStartDate())%>
+                    - <%=DateUtil.toString(period.getEndDate())%>
+                </div>
+                <div class="position"><%=period.getTitle()%>
+                </div>
+            </div>
+            <div class="description"><%=period.getDescription()%>
+            </div>
+            <% } %>
         </div>
-        <% } %>
-        <%
-            }
+        <% }
+        }
+        }
         %>
         <div class="footer-spacer"></div>
     </div>
