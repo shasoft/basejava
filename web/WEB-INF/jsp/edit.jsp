@@ -1,8 +1,7 @@
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.Map" %>
 <%@ page import="ru.javawebinar.basejava.model.*" %>
+<%@ page import="ru.javawebinar.basejava.util.DateUtil" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -16,11 +15,9 @@
 <jsp:include page="fragments/header.jsp"/>
 <%
     Resume resume = (Resume) request.getAttribute("resume");
-    Map<ContactType, String> contacts = resume.getContacts();
-    Map<SectionType, AbstractSection> sections = resume.getSections();
 %>
 <form action="edit" method="post">
-    <center><input type="submit" value="Сохранить"></center>
+    <div style="text-align: center"><input type="submit" value="Сохранить"></div>
     <hr/>
     <input name="uuid" type="hidden" value="<%=resume.getUuid()%>">
     <input name="mode" type="hidden" value="<%=request.getAttribute("mode")%>">
@@ -38,7 +35,9 @@
                         }
                 %>
                 <div><b title="<%=contactType.name()%>"><%=contactType.getTitle()%>
-                </b>:&nbsp;<input name="contact<%=contactType.name()%>" type="text" size="64" value="<%=contact%>">
+                </b>:&nbsp;<label>
+                    <input name="contact<%=contactType.name()%>" type="text" size="64" value="<%=contact%>">
+                </label>
                 </div>
                 <%
                     }
@@ -89,21 +88,58 @@
             </label>
             <%
                 }
-                if (sectionName.equals("OrganizationSection")) { %>
-            <!--
+                if (sectionName.equals("OrganizationSection")) {
+                    OrganizationSection argSection = (OrganizationSection) section;
+                    int numOrg = 0;
+                    for (Organization org : argSection.getOrganizations()) {
+            %>
             <div class="section-wrapper">
-                <div class="job-name"><a class="contact-link"
-                                         href="http://javaops.ru/">Java Online Projects</a></div>
-                <div class="period-position">
-                    <div class="period">10/2013 - Сейчас
+                <div style="border-style:solid;padding:4px">
+                    <div><b>Имя организации</b>:&nbsp;<label>
+                        <input name="orgName<%=numOrg%>" type="text" size="64"
+                                                                 value="<%=org.getHead().getTitle()%>">
+                    </label></div>
+                    <div><b>Сайт организации</b>:&nbsp;<label>
+                        <input name="orgSite<%=numOrg%>" type="text" size="64"
+                                                                  value="<%=org.getHead().getWebsite()%>">
+                    </label></div>
+                    <%
+                        int numPeriod = 0;
+                        for (Period period : org.getPeriods()) {
+                    %>
+                    <div style="border-style:dotted;padding:4px">
+                        <div><b>Начальная дата</b>:&nbsp;<label>
+                            <input name="periodStart<%=numOrg%>_<%=numPeriod%>" type="text"
+                                                                    size="8"
+                                                                    value="<%=DateUtil.toString(period.getStartDate())%>">
+                        </label>
+                        </div>
+                        <div><b>Конечная дата</b>:&nbsp;<label>
+                            <input name="periodEnd<%=numOrg%>_<%=numPeriod%>" type="text"
+                                                                   size="8"
+                                                                   value="<%=DateUtil.toString(period.getEndDate())%>">
+                        </label>
+                        </div>
+                        <div><b>Заголовок</b>:&nbsp;<label>
+                            <input name="periodTitle<%=numOrg%>_<%=numPeriod%>" type="text"
+                                                               size="80"
+                                                               value="<%=period.getTitle()%>">
+                        </label></div>
+                        <div><b>Описание</b>:&nbsp;<label>
+                            <input name="periodDesc<%=numOrg%>_<%=numPeriod%>" type="text"
+                                                              size="100"
+                                                              value="<%=period.getDescription()%>">
+                        </label></div>
                     </div>
-                    <div class="position">Автор проекта.</div>
+                    <%
+                            numPeriod++;
+                        } %>
                 </div>
-                <div class="description">Создание, организация и проведение Java онлайн проектов и стажировок.</div>
-            </div>-->
-            <% } %>
-            <%
-                }
+            </div>
+            <% numOrg++;
+            }
+            }
+            }
             %>
             <div class="footer-spacer"></div>
         </div>

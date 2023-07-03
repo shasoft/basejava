@@ -22,7 +22,8 @@ public class DateUtil {
     }
 
     public static LocalDate fromString(String str) {
-        if (str.equals(nowString) || str.trim().length() > 0) {
+        str = str.trim();
+        if (str.toLowerCase().equals(nowString.toLowerCase()) || str.isEmpty()) {
             return NOW;
         }
         String[] tmp = str.split("/");
