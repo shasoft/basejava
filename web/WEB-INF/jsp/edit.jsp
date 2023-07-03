@@ -27,7 +27,7 @@
     <div class="scrollable-panel">
         <div class="form-wrapper">
             <label>
-                <input name="full_name" type="text" size="120" value="<%=resume.getFullName()%>">
+                <input name="full_name" required type="text" size="120" value="<%=resume.getFullName()%>">
             </label>
             <div class="contacts">
                 <%

@@ -96,7 +96,7 @@ public class ControllerEdit extends ResumeServlet {
             if (mode.equals("edit")) {
                 resume = storage.get(uuid);
             } else {
-                resume = new Resume("", "Новый раб");
+                resume = new Resume("", "");
             }
             request.setAttribute("resume", resume);
             request.setAttribute("mode", mode);
