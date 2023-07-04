@@ -1,7 +1,7 @@
 <%@ page import="ru.javawebinar.basejava.model.*" %>
 <%@ page import="ru.javawebinar.basejava.util.DateUtil" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -89,19 +89,24 @@
             <%
                 }
                 if (sectionName.equals("OrganizationSection")) {
-                    OrganizationSection argSection = (OrganizationSection) section;
-                    int numOrg = 0;
-                    for (Organization org : argSection.getOrganizations()) {
+                    OrganizationSection argSection = (OrganizationSection) section; %>
+            <%
+                String hash = Integer.toHexString(argSection.hashCode());
+            %>
+            <input name="section<%=sectionType.name()%>" type="hidden" value="<%=hash%>">
+            <%
+                int numOrg = 0;
+                for (Organization org : argSection.getOrganizations()) {
             %>
             <div class="section-wrapper">
                 <div style="border-style:solid;padding:4px">
                     <div><b>Имя организации</b>:&nbsp;<label>
-                        <input name="orgName<%=numOrg%>" type="text" size="64"
-                                                                 value="<%=org.getHead().getTitle()%>">
+                        <input name="orgName<%=hash%>_<%=numOrg%>" type="text" size="64"
+                               value="<%=org.getHead().getTitle()%>">
                     </label></div>
                     <div><b>Сайт организации</b>:&nbsp;<label>
-                        <input name="orgSite<%=numOrg%>" type="text" size="64"
-                                                                  value="<%=org.getHead().getWebsite()%>">
+                        <input name="orgSite<%=hash%>_<%=numOrg%>" type="text" size="64"
+                               value="<%=org.getHead().getWebsite()%>">
                     </label></div>
                     <%
                         int numPeriod = 0;
@@ -109,26 +114,26 @@
                     %>
                     <div style="border-style:dotted;padding:4px">
                         <div><b>Начальная дата</b>:&nbsp;<label>
-                            <input name="periodStart<%=numOrg%>_<%=numPeriod%>" type="text"
-                                                                    size="8"
-                                                                    value="<%=DateUtil.toString(period.getStartDate())%>">
+                            <input name="periodStart<%=hash%>_<%=numOrg%>_<%=numPeriod%>" type="text"
+                                   size="8"
+                                   value="<%=DateUtil.toString(period.getStartDate())%>">
                         </label>
                         </div>
                         <div><b>Конечная дата</b>:&nbsp;<label>
-                            <input name="periodEnd<%=numOrg%>_<%=numPeriod%>" type="text"
-                                                                   size="8"
-                                                                   value="<%=DateUtil.toString(period.getEndDate())%>">
+                            <input name="periodEnd<%=hash%>_<%=numOrg%>_<%=numPeriod%>" type="text"
+                                   size="8"
+                                   value="<%=DateUtil.toString(period.getEndDate())%>">
                         </label>
                         </div>
                         <div><b>Заголовок</b>:&nbsp;<label>
-                            <input name="periodTitle<%=numOrg%>_<%=numPeriod%>" type="text"
-                                                               size="80"
-                                                               value="<%=period.getTitle()%>">
+                            <input name="periodTitle<%=hash%>_<%=numOrg%>_<%=numPeriod%>" type="text"
+                                   size="80"
+                                   value="<%=period.getTitle()%>">
                         </label></div>
                         <div><b>Описание</b>:&nbsp;<label>
-                            <input name="periodDesc<%=numOrg%>_<%=numPeriod%>" type="text"
-                                                              size="100"
-                                                              value="<%=period.getDescription()%>">
+                            <input name="periodDesc<%=hash%>_<%=numOrg%>_<%=numPeriod%>" type="text"
+                                   size="100"
+                                   value="<%=period.getDescription()%>">
                         </label></div>
                     </div>
                     <%

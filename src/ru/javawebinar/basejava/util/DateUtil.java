@@ -27,7 +27,7 @@ public class DateUtil {
             return NOW;
         }
         String[] tmp = str.split("/");
-        return of(Integer.getInteger(tmp[0]), Month.of(Integer.getInteger(tmp[1])));
+        return of(Integer.parseInt(tmp[1]), Month.of(Integer.parseInt(tmp[0])));
     }
 
 }

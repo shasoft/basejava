@@ -1,12 +1,15 @@
 package ru.javawebinar.basejava.web;
 
 import ru.javawebinar.basejava.model.*;
+import ru.javawebinar.basejava.util.DateUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.UUID;
 
 public class ControllerEdit extends ResumeServlet {
@@ -62,7 +65,49 @@ public class ControllerEdit extends ResumeServlet {
                     break;
                     case EXPERIENCE:
                     case EDUCATION: {
-                        section = new OrganizationSection();
+                        OrganizationSection orgSection = new OrganizationSection();
+                        int numOrg = 0;
+                        while (true) {
+                            String prefixOrg = value + "_" + Integer.toString(numOrg);
+                            String orgName = request.getParameter("orgName" + prefixOrg);
+                            if (orgName == null) {
+                                break;
+                            }
+                            String orgSite = request.getParameter("orgSite" + prefixOrg);
+
+                            List<Period> periods = new ArrayList<>();
+                            int numPeriod = 0;
+                            while (true) {
+
+                                String prefixPeriod = prefixOrg + "_" + Integer.toString(numPeriod);
+                                String periodTitle = request.getParameter("periodTitle" + prefixPeriod);
+                                if (periodTitle == null) {
+                                    break;
+                                }
+                                String periodStart = request.getParameter("periodStart" + prefixPeriod);
+                                String periodEnd = request.getParameter("periodEnd" + prefixPeriod);
+                                String periodDesc = request.getParameter("periodDesc" + prefixPeriod);
+
+                                periods.add(new Period(
+                                                periodTitle,
+                                                DateUtil.fromString(periodStart),
+                                                DateUtil.fromString(periodEnd),
+                                                periodDesc
+                                        )
+                                );
+
+                                numPeriod++;
+                            }
+
+                            orgSection.getOrganizations().add(
+                                    new Organization(new OrganizationHead(orgName, orgSite), periods)
+                            );
+
+                            numOrg++;
+                        }
+                        if (orgSection.getOrganizations().size() > 0) {
+                            section = orgSection;
+                        }
                     }
                     break;
                 }
