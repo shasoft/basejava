@@ -17,7 +17,7 @@
     Resume resume = (Resume) request.getAttribute("resume");
 %>
 <form action="edit" method="post">
-    <div style="text-align: center"><input type="submit" value="Сохранить"></div>
+    <div style="text-align: center"><input type="submit" name="actionSave" value="Сохранить"></div>
     <hr/>
     <input name="uuid" type="hidden" value="<%=resume.getUuid()%>">
     <input name="mode" type="hidden" value="<%=request.getAttribute("mode")%>">
@@ -75,7 +75,8 @@
             <% if (sectionName.equals("TextSection")) {
                 TextSection textSection = (TextSection) section; %>
             <div style="padding:32px"><label>
-                <input name="section<%=sectionType.name()%>" type="text" size="120" value="<%=textSection.getText()%>">
+                <input name="section<%=sectionType.name()%>" type="text" size="120"
+                       value="<%=textSection.getText()%>">
             </label>
             </div>
             <% }
@@ -93,6 +94,8 @@
             <%
                 String hash = Integer.toHexString(argSection.hashCode());
             %>
+            <div style="text-align: center"><input type="submit" name="actionAddOrg<%=sectionType.name()%>"
+                                                   value="Добавить организацию"></div>
             <input name="section<%=sectionType.name()%>" type="hidden" value="<%=hash%>">
             <%
                 int numOrg = 0;
@@ -100,19 +103,29 @@
             %>
             <div class="section-wrapper">
                 <div style="border-style:solid;padding:4px">
+                    <label>
+                        <input type="checkbox" name="orgDelete<%=hash%>_<%=numOrg%>">
+                    </label>
+                    <label for="orgDelete<%=hash%>_<%=numOrg%>">Удалить организацию</label>
                     <div><b>Имя организации</b>:&nbsp;<label>
-                        <input name="orgName<%=hash%>_<%=numOrg%>" type="text" size="64"
+                        <input name="orgName<%=hash%>_<%=numOrg%>" type="text" size="64" required
                                value="<%=org.getHead().getTitle()%>">
                     </label></div>
                     <div><b>Сайт организации</b>:&nbsp;<label>
                         <input name="orgSite<%=hash%>_<%=numOrg%>" type="text" size="64"
                                value="<%=org.getHead().getWebsite()%>">
                     </label></div>
+                    <div style="text-align: center"><input type="submit" name="actionAddPeriod<%=hash%>"
+                                                           value="Добавить период"></div>
                     <%
                         int numPeriod = 0;
                         for (Period period : org.getPeriods()) {
                     %>
                     <div style="border-style:dotted;padding:4px">
+                        <label>
+                            <input type="checkbox" name="periodDelete<%=hash%>_<%=numOrg%>_<%=numPeriod%>">
+                        </label>
+                        <label for="periodDelete<%=hash%>_<%=numOrg%>_<%=numPeriod%>">Удалить период</label>
                         <div><b>Начальная дата</b>:&nbsp;<label>
                             <input name="periodStart<%=hash%>_<%=numOrg%>_<%=numPeriod%>" type="text"
                                    size="8"
@@ -146,6 +159,7 @@
             }
             }
             %>
+            <div class="section-wrapper"></div>
             <div class="footer-spacer"></div>
         </div>
     </div>

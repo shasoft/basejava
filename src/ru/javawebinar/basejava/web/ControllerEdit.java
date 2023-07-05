@@ -66,6 +66,14 @@ public class ControllerEdit extends ResumeServlet {
                     case EXPERIENCE:
                     case EDUCATION: {
                         OrganizationSection orgSection = new OrganizationSection();
+
+                        String actionAddOrg = request.getParameter("actionAddOrg" + typeStr);
+                        if (actionAddOrg != null) {
+                            orgSection.getOrganizations().add(
+                                    new Organization(new OrganizationHead("", ""))
+                            );
+                        }
+
                         int numOrg = 0;
                         while (true) {
                             String prefixOrg = value + "_" + Integer.toString(numOrg);
@@ -73,35 +81,55 @@ public class ControllerEdit extends ResumeServlet {
                             if (orgName == null) {
                                 break;
                             }
-                            String orgSite = request.getParameter("orgSite" + prefixOrg);
+                            String actionDeleteOrg = request.getParameter("orgDelete" + prefixOrg);
+                            if (actionDeleteOrg == null) {
 
-                            List<Period> periods = new ArrayList<>();
-                            int numPeriod = 0;
-                            while (true) {
+                                String orgSite = request.getParameter("orgSite" + prefixOrg);
 
-                                String prefixPeriod = prefixOrg + "_" + Integer.toString(numPeriod);
-                                String periodTitle = request.getParameter("periodTitle" + prefixPeriod);
-                                if (periodTitle == null) {
-                                    break;
+                                List<Period> periods = new ArrayList<>();
+
+                                String actionAddPeriod = request.getParameter("actionAddPeriod" + value);
+                                if (actionAddPeriod != null) {
+                                    periods.add(new Period(
+                                                    "",
+                                                    DateUtil.fromString("01/2023"),
+                                                    DateUtil.fromString("07/2023"),
+                                                    ""
+                                            )
+                                    );
                                 }
-                                String periodStart = request.getParameter("periodStart" + prefixPeriod);
-                                String periodEnd = request.getParameter("periodEnd" + prefixPeriod);
-                                String periodDesc = request.getParameter("periodDesc" + prefixPeriod);
 
-                                periods.add(new Period(
-                                                periodTitle,
-                                                DateUtil.fromString(periodStart),
-                                                DateUtil.fromString(periodEnd),
-                                                periodDesc
-                                        )
+                                int numPeriod = 0;
+                                while (true) {
+
+                                    String prefixPeriod = prefixOrg + "_" + Integer.toString(numPeriod);
+                                    String periodTitle = request.getParameter("periodTitle" + prefixPeriod);
+                                    if (periodTitle == null) {
+                                        break;
+                                    }
+                                    String actionDeletePeriod = request.getParameter("periodDelete" + prefixPeriod);
+                                    if (actionDeletePeriod == null) {
+
+                                        String periodStart = request.getParameter("periodStart" + prefixPeriod);
+                                        String periodEnd = request.getParameter("periodEnd" + prefixPeriod);
+                                        String periodDesc = request.getParameter("periodDesc" + prefixPeriod);
+
+                                        periods.add(new Period(
+                                                        periodTitle,
+                                                        DateUtil.fromString(periodStart),
+                                                        DateUtil.fromString(periodEnd),
+                                                        periodDesc
+                                                )
+                                        );
+                                    }
+
+                                    numPeriod++;
+                                }
+
+                                orgSection.getOrganizations().add(
+                                        new Organization(new OrganizationHead(orgName, orgSite), periods)
                                 );
-
-                                numPeriod++;
                             }
-
-                            orgSection.getOrganizations().add(
-                                    new Organization(new OrganizationHead(orgName, orgSite), periods)
-                            );
 
                             numOrg++;
                         }
@@ -116,7 +144,9 @@ public class ControllerEdit extends ResumeServlet {
                 }
             }
         }
-        if (full_name.isEmpty()) {
+
+        String actionSave = request.getParameter("actionSave");
+        if (actionSave == null || full_name.isEmpty()) {
             request.setAttribute("resume", resume);
             request.setAttribute("mode", mode);
             request.getRequestDispatcher("/WEB-INF/jsp/edit.jsp").forward(request, response);
